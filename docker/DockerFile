@@ -1,0 +1,50 @@
+# First Build Stage: Compiling
+FROM python:3.8-slim AS compile
+
+RUN apt-get update && apt-get -y upgrade \
+    && apt-get install -y --no-install-recommends build-essential gcc \
+    && python -m venv /opt/venv
+
+ENV PATH='/opt/venv/bin:$PATH'
+
+WORKDIR /usr/src/app
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt \
+    && pip install setuptools gunicorn eventlet==0.30.2
+
+# To match the directory structure at host:
+ADD did_communication_api/ ./did_communication_api
+ADD setup.py .
+ADD README.md .
+
+RUN pip install .
+
+# Second Build Stage: Building
+FROM python:3.8-slim AS build
+
+ADD ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+ADD ./did_communication_api/config/config.yml /srv/config/config.yml
+ADD ./did_communication_api/config/logging.yml /srv/config/logging.yml
+
+RUN ["chmod", "+x", "/usr/local/bin/entrypoint.sh"]
+
+COPY --from=compile /opt/venv /opt/venv
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=UTF-8 \
+    CONFIG_PATH="/srv/config/config.yml" \
+    LOGGING_CNF_PATH="/srv/config/logging.yml" \
+    PATH="/opt/venv/bin:$PATH"
+
+RUN useradd -ms /bin/bash apiuser
+
+USER apiuser
+
+WORKDIR /home/apiuser
+
+EXPOSE ${API_PORT}
+
+ENTRYPOINT entrypoint.sh
