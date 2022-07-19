@@ -1,0 +1,11 @@
+---
+services:
+  did_communication_api:
+    server:
+      host:
+      port:
+      debug: true
+    webhooks:
+      request_received: ""
+    logging:
+      level: DEBUG
