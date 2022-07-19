@@ -1,0 +1,11 @@
+---
+services:
+  did_communication_api:
+    server:
+      host: 'host.docker.internal' # if started using docker-compose from SSI-ACS
+      port: 5001
+      debug: true
+    webhooks:
+      request_received: "http://access_decision_point:5002/webhook/message/" # if started using docker-compose from SSI-ACS
+    logging:
+      level: DEBUG
