@@ -1,0 +1,9 @@
+PyYAML==6.0
+flask-restx==0.5.1
+Flask-HTTPAuth==4.5.0
+python-json-logger==2.0.2
+peewee==3.14.8
+peerdid==0.4.0
+didcomm==0.3.0
+requests==2.27.1
+mysql-connector-python==8.0.26
