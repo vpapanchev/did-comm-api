@@ -1,7 +1,5 @@
 # Do not upload configuration files
 secrets.json
-did_communication_api/config/config.yml
-did_communication_api/config/config.backup.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
