@@ -1,3 +1,6 @@
+This README.md is WIP!\
+Links and information might be inaccurate.
+
 ### Parent project
 
 This project was developed as a Microservice in the design of the [Interoperable SSI Access Control System](https://git.scc.kit.edu/uwmbv/ssi-acs).
