@@ -122,4 +122,4 @@ Email: vasilpapanchev@gmail.com
 
 ## Project status
 
-The project was created as a prototype used for evaluating purposes of the [SSI-based Access Control System](https://github.com/vpapanchev/ssi-acs).
+The project was created as a prototype used for evaluating purposes and might not be actively supported in the future.
