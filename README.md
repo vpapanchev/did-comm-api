@@ -39,7 +39,7 @@ Functionality of DID-Comm-API:
 
 ## Usage
 
-To use the DID_Comm_API an SSI Client application with the following functionalties:
+To use the DID_Comm_API an SSI-Client application with the following functionalties:
 - Peer-DIDs: Create and Resolve Peer-DIDs
 - DIDComm Messaging: Pack and Unpack authenticated+encrypted DIDComm Messages
 - HTTP Requests: Pack the created DIDComm Messages in HTTP Requests as described below
@@ -47,6 +47,8 @@ To use the DID_Comm_API an SSI Client application with the following functionalt
 is required. For a reference implementation see the example [SSI Client](https://github.com/vpapanchev/ssi-acs-client) implementation.
 
 The SSI-Client should send HTTP Requests on the `/did_comm/inbox/` API
+
+Furthermore, a service to be configured as a *Message-received Webhook* is also required. This service is notified whenever DID-Comm-API receives a new request and instructs DID-Comm-API on how to respond to the sender of the request. The formats of the notification and its response are given below. An example implementation of this functionality is contained in the [SSI Access Decision Point](https://github.com/vpapanchev/ssi-adp).
 
 ### Packing DIDComm Messages in HTTP Requests and Responses:
 
@@ -56,6 +58,41 @@ Currently, the DID_Comm_API packs DIDComm Messages in the message bodies of HTTP
   "didcomm_msg": "<encrypted and authenticated DIDComm Messsage>"
 }
 ```
+
+### Message-Received Webhook API Formats
+
+DID-Comm-API notifies the received webhook by sending an HTTP POST Request with the body: 
+```json
+{
+  "sender": "<sender_peer_did>",
+  "request": {
+    "type": "DIDComm",
+    "http_request_method": "<http_request_method>",
+    "message": {
+      "id": "<Message ID>",
+      "type": "<Message Type>",
+      "body": "<Message Body>",
+      "attachments": ["<List of DIDComm attachments>"]
+    }
+  }
+}
+```
+
+The Webhook responds with instructions on how DID-Comm-API should respond. The instructions are sent as an HTTP Response with the following body:
+```json
+{
+  "response": {
+    "http_code": "<response_http_code>",
+    "type": "DIDComm",
+    "message": {
+      "id": "<Response DIDComm Message ID>",
+      "type": "<Response DIDComm Message Type>",
+      "body": "<Response DIDComm Message Body>"
+    }
+  }
+}
+```
+
 
 ### General Workflow
 
